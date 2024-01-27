@@ -1,5 +1,6 @@
 import time
 import os
+import shutil
 from datetime import datetime
 import pyautogui
 from pynput import mouse
@@ -50,6 +51,18 @@ def images_to_pdf(image_paths, pdf_path):
     images = [Image.open(path).convert('RGB') for path in image_paths]
     images[0].save(pdf_path, save_all=True, append_images=images[1:])
 
+def remove_imgs():
+    try:
+        # img 폴더와 그 내부 파일 전체 삭제
+        shutil.rmtree('./img')
+        print("Removed 'img' directory and its contents.")
+    except OSError as e:
+        print(f"Error: {e}")
+
+    os.makedirs('./img', exist_ok=True)
+
+    with open('./img/.gitkeep', 'w') as f:
+        pass
 
 if __name__ == "__main__":
 
@@ -73,3 +86,4 @@ if __name__ == "__main__":
 
     sorted_images = sort_images_by_filename(image_folder)
     images_to_pdf(sorted_images, pdf_file_path)
+    remove_imgs()
